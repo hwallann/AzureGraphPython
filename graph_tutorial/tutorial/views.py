@@ -4,9 +4,9 @@ from tutorial.auth_helper import get_sign_in_url, get_token_from_code, store_tok
 
 from django.shortcuts import render
 
-# import the Get User graph request helper function
+# Import helper functions for Microsoft graph exploring
 
-from tutorial.graph_helper import get_user
+from tutorial.graph_helper import get_user, get_calendar_events
 # Create your views here.
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -27,6 +27,19 @@ def initialize_context(request):
 
 def home(request):
   context = initialize_context(request)
+
+  return render(request, 'tutorial/home.html', context)
+
+def calendar(request):
+  context = initialize_context(request)
+
+  token = get_token(request)
+
+  events = get_calendar_events(token)
+
+  context['errors'] = [
+    { 'message': 'Events', 'debug': format(events)}
+  ]
 
   return render(request, 'tutorial/home.html', context)
 
