@@ -1,5 +1,6 @@
 from django.urls import reverse
-from tutorial.auth_helper import get_sign_in_url, get_token_from_code
+
+from tutorial.auth_helper import get_sign_in_url, get_token_from_code, store_token, store_user, remove_user_and_token, get_token
 
 from django.shortcuts import render
 
@@ -45,7 +46,9 @@ def callback(request):
 
   # Get the user's profile
   user = get_user(token)
-  # Temporary! Save the response in an error so it's displayed
-  request.session['flash_error'] = { 'message': 'Token retrieved',
-    'debug': 'User: {0}\nToken: {1}'.format(user, token) }
+
+  # Save token and user
+  store_token(request, token)
+  store_user(request, user)
+
   return HttpResponseRedirect(reverse('home'))
