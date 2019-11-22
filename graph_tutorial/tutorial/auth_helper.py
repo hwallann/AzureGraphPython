@@ -54,8 +54,7 @@ def store_user(request, user):
     'email': user['mail'] if (user['mail'] != None) else user['userPrincipalName']
   }
 
-def get_token(request):
-  token = request.session['oauth_token']
+def setup_token_refreshing(request, token):
   if token != None:
     # Check expiration
     now = time.time()
@@ -83,6 +82,13 @@ def get_token(request):
     else:
       # Token still valid, just return it
       return token
+
+def get_token(request):
+  token = request.session['oauth_token']
+  
+  token = setup_token_refreshing(request, token)
+
+  return token
 
 def remove_user_and_token(request):
   if 'oauth_token' in request.session:
