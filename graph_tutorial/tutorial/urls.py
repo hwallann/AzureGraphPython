@@ -5,4 +5,6 @@ from . import views
 urlpatterns = [
   # /tutorial
   path('', views.home, name='home'),
+  path('signin', views.sign_in, name='signin'),
+  path('callback', views.callback, name='callback'),
 ]
