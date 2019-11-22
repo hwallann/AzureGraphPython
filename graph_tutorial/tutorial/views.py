@@ -38,6 +38,12 @@ def sign_in(request):
   # Redirect to the Azure sign-in page
   return HttpResponseRedirect(sign_in_url)
 
+def sign_out(request):
+  # Clear out the user and token
+  remove_user_and_token(request)
+
+  return HttpResponseRedirect(reverse('home'))
+
 def callback(request):
   # Get the state saved in session
   expected_state = request.session.pop('auth_state', '')
