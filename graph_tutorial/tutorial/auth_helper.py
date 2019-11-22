@@ -42,3 +42,25 @@ def get_token_from_code(callback_url, expected_state):
     authorization_response=callback_url)
 
   return token
+
+
+def store_token(request, token):
+  request.session['oauth_token'] = token
+
+def store_user(request, user):
+  request.session['user'] = {
+    'is_authenticated': True,
+    'name': user['displayName'],
+    'email': user['mail'] if (user['mail'] != None) else user['userPrincipalName']
+  }
+
+def get_token(request):
+  token = request.session['oauth_token']
+  return token
+
+def remove_user_and_token(request):
+  if 'oauth_token' in request.session:
+    del request.session['oauth_token']
+
+  if 'user' in request.session:
+    del request.session['user']
